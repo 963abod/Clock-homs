@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ساعة حمص القديمة | ذاكرة مدينة</title>
+<meta name="description" content="ساعة حمص القديمة - ذاكرة مدينة ودقات لا تشبه أي زمن">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+:root{--bg-primary:#0a0a0a;--bg-secondary:#111;--bg-tertiary:#1a1a1a;--accent:#c9a96e;--accent-light:#e0c99a;--text-primary:#f5f0e8;--text-secondary:#9a9185;--text-muted:#5c554d;--divider:rgba(201,169,110,0.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo','Tajawal',sans-serif;background:var(--bg-primary);color:var(--text-primary);overflow-x:hidden;line-height:1.8}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg-primary)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .6s cubic-bezier(.16,1,.3,1);opacity:0;transform:translateY(-20px)}
+.nav.visible{opacity:1;transform:translateY(0);background:rgba(10,10,10,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--divider)}
+.nav-logo{font-family:'Tajawal',sans-serif;font-weight:900;font-size:1.2rem;color:var(--accent);letter-spacing:2px}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:.85rem;font-weight:500;letter-spacing:1px;transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;right:0;width:0;height:1px;background:var(--accent);transition:width .3s}
+.nav-links a:hover{color:var(--accent)}
+.nav-links a:hover::after{width:100%}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:.5rem;z-index:1001}
+.nav-toggle span{display:block;width:24px;height:1.5px;background:var(--accent);transition:all .3s}
+.nav-toggle.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.nav-toggle.open span:nth-child(2){opacity:0}
+.nav-toggle.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.hero{position:relative;width:100%;height:100vh;height:100dvh;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:0;z-index:1}
+.hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.2);filter:brightness(.4) contrast(1.1)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,10,10,.3) 0%,rgba(10,10,10,.1) 40%,rgba(10,10,10,.6) 70%,var(--bg-primary) 100%);z-index:2}
+.hero-content{position:relative;z-index:3;text-align:center;padding:2rem;max-width:900px}
+.hero-eyebrow{font-size:.8rem;letter-spacing:6px;color:var(--accent);margin-bottom:1.5rem;opacity:0;transform:translateY(30px)}
+.hero-title{font-family:'Tajawal',sans-serif;font-weight:900;font-size:clamp(2.5rem,8vw,5.5rem);line-height:1.1;margin-bottom:1.5rem;opacity:0;transform:translateY(40px);text-shadow:0 4px 30px rgba(0,0,0,.5)}
+.hero-title .line{display:block;overflow:hidden}
+.hero-subtitle{font-size:clamp(1rem,2.5vw,1.4rem);color:var(--text-secondary);font-weight:300;letter-spacing:2px;opacity:0;transform:translateY(30px)}
+.hero-scroll-indicator{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0}
+.hero-scroll-indicator span{font-size:.7rem;letter-spacing:3px;color:var(--text-muted)}
+.hero-scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:.3;transform:scaleY(.5)}50%{opacity:1;transform:scaleY(1)}}
+.section{position:relative;padding:8rem 2rem;overflow:hidden}
+.section-inner{max-width:1200px;margin:0 auto;position:relative;z-index:2}
+.cinematic-image{position:relative;width:100%;height:70vh;min-height:400px;overflow:hidden;margin:4rem 0;border-radius:4px}
+.cinematic-image img{width:100%;height:100%;object-fit:cover;transform:scale(1.15)}
+.cinematic-image::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--bg-primary) 0%,transparent 40%);pointer-events:none}
+.timeline{position:relative;padding:4rem 0}
+.timeline-line{position:absolute;right:50%;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--accent),transparent);transform:translateX(50%);opacity:.3}
+.timeline-item{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-bottom:8rem;position:relative}
+.timeline-item:last-child{margin-bottom:0}
+.timeline-item:nth-child(even){direction:ltr}
+.timeline-item:nth-child(even)>*{direction:rtl}
+.timeline-content{opacity:0;transform:translateY(50px)}
+.timeline-year{font-family:'Tajawal',sans-serif;font-weight:900;font-size:clamp(3rem,8vw,6rem);color:var(--accent);opacity:.15;line-height:1;margin-bottom:1rem;display:block}
+.timeline-title{font-size:clamp(1.3rem,3vw,2rem);font-weight:700;margin-bottom:1rem;color:var(--text-primary)}
+.timeline-desc{color:var(--text-secondary);font-size:1rem;line-height:2}
+.timeline-image{position:relative;overflow:hidden;border-radius:4px;opacity:0;transform:scale(.9)}
+.timeline-image img{width:100%;height:auto;display:block;filter:grayscale(30%);transition:filter .6s}
+.timeline-image:hover img{filter:grayscale(0)}
+.timeline-image::before{content:'';position:absolute;inset:0;border:1px solid var(--divider);border-radius:4px;z-index:2;pointer-events:none}
+.quote-section{padding:10rem 2rem;text-align:center;position:relative}
+.quote-section::before{content:'"';font-family:'Tajawal',sans-serif;font-size:15rem;color:var(--accent);opacity:.05;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);line-height:1;pointer-events:none}
+.quote-text{font-size:clamp(1.2rem,3vw,2rem);font-weight:300;color:var(--text-primary);max-width:800px;margin:0 auto;line-height:2;opacity:0;transform:translateY(40px)}
+.quote-accent{color:var(--accent);font-weight:600}
+.comparison{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:6rem 2rem;position:relative}
+.comparison-title{text-align:center;margin-bottom:4rem;opacity:0;transform:translateY(30px)}
+.comparison-title h2{font-family:'Tajawal',sans-serif;font-weight:900;font-size:clamp(2rem,5vw,3.5rem);margin-bottom:1rem}
+.comparison-title p{color:var(--text-secondary);font-size:1rem}
+.comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:1400px;margin:0 auto;width:100%;position:relative}
+.comparison-divider{position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(to bottom,transparent,var(--accent),transparent);transform:translateX(-50%);z-index:10}
+.comparison-side{padding:3rem;position:relative;overflow:hidden}
+.comparison-side-left{opacity:0;transform:translateX(-60px)}
+.comparison-side-right{opacity:0;transform:translateX(60px)}
+.comparison-label{font-family:'Tajawal',sans-serif;font-weight:900;font-size:1.5rem;color:var(--accent);margin-bottom:1.5rem;letter-spacing:2px}
+.comparison-image{width:100%;height:400px;overflow:hidden;border-radius:4px;margin-bottom:1.5rem;position:relative}
+.comparison-image img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.16,1,.3,1)}
+.comparison-image:hover img{transform:scale(1.05)}
+.comparison-desc{color:var(--text-secondary);font-size:.95rem;line-height:1.9}
+.comparison-year{display:inline-block;background:var(--accent);color:var(--bg-primary);padding:.3rem 1rem;border-radius:2px;font-weight:700;font-size:.85rem;margin-bottom:1rem}
+.final{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem;position:relative;overflow:hidden}
+.final-bg{position:absolute;inset:0;z-index:1}
+.final-bg img{width:100%;height:100%;object-fit:cover;filter:brightness(.25) saturate(.8);transform:scale(1.1)}
+.final-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,var(--bg-primary) 0%,rgba(10,10,10,.7) 50%,var(--bg-primary) 100%);z-index:2}
+.final-content{position:relative;z-index:3;max-width:800px}
+.final-sequence{margin-bottom:3rem}
+.final-clock-name{font-family:'Tajawal',sans-serif;font-weight:900;font-size:clamp(2rem,6vw,4rem);margin-bottom:.5rem;opacity:0;transform:translateY(30px)}
+.final-clock-name.old{color:var(--accent)}
+.final-clock-name.new{color:var(--text-primary)}
+.final-transition{font-size:1.5rem;color:var(--text-muted);margin:2rem 0;opacity:0}
+.final-text{font-size:clamp(1.2rem,3vw,1.8rem);font-weight:300;color:var(--text-secondary);line-height:2;opacity:0;transform:translateY(30px)}
+.final-text strong{color:var(--accent);font-weight:600}
+.footer{padding:3rem 2rem;text-align:center;border-top:1px solid var(--divider);background:var(--bg-secondary)}
+.footer-credit{font-size:.85rem;color:var(--text-muted);letter-spacing:1px}
+.footer-credit a{color:var(--accent);text-decoration:none;font-weight:600;transition:color .3s;position:relative}
+.footer-credit a::after{content:'';position:absolute;bottom:-2px;right:0;width:100%;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.footer-credit a:hover::after{transform:scaleX(1);transform-origin:right}
+.footer-credit a:hover{color:var(--accent-light)}
+.grain{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")}
+.loading{position:fixed;inset:0;background:var(--bg-primary);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;transition:opacity .8s,visibility .8s}
+.loading.hidden{opacity:0;visibility:hidden}
+.loading-text{font-family:'Tajawal',sans-serif;font-weight:900;font-size:1.5rem;color:var(--accent);letter-spacing:4px}
+.loading-bar{width:120px;height:1px;background:var(--bg-tertiary);position:relative;overflow:hidden}
+.loading-bar::after{content:'';position:absolute;top:0;right:0;height:100%;width:40%;background:var(--accent);animation:loadingSlide 1.5s ease-in-out infinite}
+@keyframes loadingSlide{0%{transform:translateX(200%)}100%{transform:translateX(-300%)}}
+@media (max-width:768px){
+.nav{padding:1rem 1.5rem}
+.nav-toggle{display:flex}
+.nav-links{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,10,.97);backdrop-filter:blur(20px);flex-direction:column;justify-content:center;align-items:center;gap:2.5rem;display:none;height:100dvh}
+.nav-links.open{display:flex}
+.nav-links a{font-size:1.1rem}
+.section{padding:4rem 1.5rem}
+.timeline-item{grid-template-columns:1fr;gap:2rem;margin-bottom:4rem}
+.timeline-item:nth-child(even){direction:rtl}
+.timeline-line{display:none}
+.comparison-grid{grid-template-columns:1fr}
+.comparison-divider{display:none}
+.comparison-side{padding:1.5rem}
+.cinematic-image{height:50vh}
+.quote-section{padding:6rem 1.5rem}
+}
+</style>
+</head>
+<body>
+<div class="loading" id="loading"><div class="loading-text">حمص</div><div class="loading-bar"></div></div>
+<div class="grain"></div>
+<nav class="nav" id="nav">
+<div class="nav-logo">ساعة حمص</div>
+<button class="nav-toggle" id="navToggle" aria-label="فتح القائمة" aria-expanded="false">
+<span></span><span></span><span></span>
+</button>
+<ul class="nav-links" id="navLinks">
+<li><a href="#hero">الرئيسية</a></li>
+<li><a href="#story">القصة</a></li>
+<li><a href="#comparison">ساعتان</a></li>
+<li><a href="#final">الختام</a></li>
+</ul>
+</nav>
+
+<section class="hero" id="hero">
+<div class="hero-bg">
+<img src="old-clock-1.jpg" alt="ساعة حمص القديمة في الثلج" id="hero-img">
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content">
+<div class="hero-eyebrow">ذاكرة مدينة</div>
+<h1 class="hero-title">
+<span class="line">ساعة حمص</span>
+<span class="line">القديمة</span>
+</h1>
+<p class="hero-subtitle">ذاكرة مدينة... ودقات لا تشبه أي زمن</p>
+</div>
+<div class="hero-scroll-indicator">
+<span>استكشف</span>
+<div class="hero-scroll-line"></div>
+</div>
+</section>
+
+<section class="quote-section" id="quote">
+<p class="quote-text">
+كانت <span class="quote-accent">الساعة</span> لا تقيس الوقت فحسب،<br>
+بل كانت تقيس عمر المدينة ونبض شوارعها
+</p>
+</section>
+
+<section class="section" id="story">
+<div class="section-inner">
+<div class="timeline">
+<div class="timeline-line"></div>
+
+<div class="timeline-item">
+<div class="timeline-content">
+<span class="timeline-year">1925</span>
+<h3 class="timeline-title">بداية الدقات</h3>
+<p class="timeline-desc">
+في عام 1925، وخلال فترة الانتداب الفرنسي، أُقيمت ساعة حمص القديمة في شارع الحميدية،
+القلب النابض للمدينة. كانت الساعة آلية ألمانية الصنع، مثبتة على عمود حديدي مزخرف
+يحمل في قمته فانوساً قديماً، لتحكم إيقاع حياة الحمصيين لعقود طويلة.
+</p>
+</div>
+<div class="timeline-image">
+<img src="old-clock-2.jpg" alt="ساعة حمص القديمة في الدوار" loading="lazy">
+</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-content">
+<span class="timeline-year">عقود</span>
+<h3 class="timeline-title">العصر الذهبي</h3>
+<p class="timeline-desc">
+لعقود من الزمن، ظلت الساعة القديمة شاهدة على تفاصيل الحياة في حمص.
+من مواعيد فتح المحال التجارية في شارع الحميدية، إلى لقاءات الأصدقاء
+عند "ساحة الساعة"، كانت الساعة نقطة التقاء الجميع وعلامة فارقة في ذاكرة المدينة.
+</p>
+</div>
+<div class="timeline-image">
+<img src="old-clock-3.jpg" alt="ساعة حمص القديمة بالأبيض والأسود" loading="lazy">
+</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-content">
+<span class="timeline-year">رحلة</span>
+<h3 class="timeline-title">رحلة عبر الزمان</h3>
+<p class="timeline-desc">
+مرّت الساعة بعدة مواقع عبر تاريخ المدينة: من شارع الحميدية إلى دوار المحافظة،
+ثم إلى شارع الحسكة، ومن ثم العودة إلى ساحة الساعة (الحميدية)،
+قبل أن تستقر مجدداً في شارع المحافظة. في كل موقع، حملت معها ذكريات جديدة.
+</p>
+</div>
+<div class="timeline-image">
+<img src="old-clock-1.jpg" alt="ساعة حمص القديمة في الثلج" loading="lazy">
+</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-content">
+<span class="timeline-year">2014</span>
+<h3 class="timeline-title">لحظة الوداع</h3>
+<p class="timeline-desc">
+في عام 2014، أُزيلت الساعة القديمة بحجة "الصيانة"، لكنها لم تعد إلى مكانها.
+كان الوداع صعباً على أهل المدينة الذين نشأوا على صوت دقاتها.
+لم تكن مجرد ساعة، بل كانت جزءاً من الهوية الحمصية الأصيلة.
+</p>
+</div>
+<div class="timeline-image">
+<img src="old-clock-3.jpg" alt="ذكرى الساعة القديمة" loading="lazy">
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<div class="cinematic-image" id="cinematic-break">
+<img src="old-clock-1.jpg" alt="ساعة حمص القديمة - لقطة سينمائية" loading="lazy">
+</div>
+
+<section class="comparison" id="comparison">
+<div class="comparison-title">
+<h2>ساعتان من حمص</h2>
+<p>رحلة عبر الزمن بين ذاكرة الماضي وإيقاع الحاضر</p>
+</div>
+<div class="comparison-grid">
+<div class="comparison-divider"></div>
+
+<div class="comparison-side comparison-side-left">
+<div class="comparison-year">1925</div>
+<div class="comparison-label">الساعة القديمة</div>
+<div class="comparison-image">
+<img src="old-clock-2.jpg" alt="الساعة القديمة في حمص" loading="lazy">
+</div>
+<p class="comparison-desc">
+ساعة شارع الحميدية العريقة، آلية ألمانية على عمود حديدي مزخرف.
+كانت شاهدة على تاريخ المدينة لما يقارب التسعين عاماً،
+قبل أن تُزال في عام 2014.
+</p>
+</div>
+
+<div class="comparison-side comparison-side-right">
+<div class="comparison-year">1966</div>
+<div class="comparison-label">الساعة الجديدة</div>
+<div class="comparison-image">
+<img src="new-clock.jpg" alt="ساعة كرجية حداد - الساعة الجديدة" loading="lazy">
+</div>
+<p class="comparison-desc">
+برج ساعة كرجية حداد، يبلغ ارتفاعه 30 متراً.
+بُني عام 1966 ليصبح رمزاً جديداً للمدينة،
+بأربعة أوجه وتصميم معماري مميز باللونين الأبيض والأسود.
+</p>
+</div>
+</div>
+</section>
+
+<section class="final" id="final">
+<div class="final-bg">
+<img src="old-clock-3.jpg" alt="خلفية ختامية" id="final-bg-img">
+</div>
+<div class="final-overlay"></div>
+<div class="final-content">
+<div class="final-sequence">
+<div class="final-clock-name old">الساعة القديمة</div>
+<div class="final-transition">↓</div>
+<div class="final-clock-name new">الساعة الجديدة</div>
+</div>
+<p class="final-text">
+<strong>ساعتان...</strong> ومدينة واحدة تحفظ الزمن.
+</p>
+</div>
+</section>
+
+<footer class="footer">
+<p class="footer-credit">
+Designed &amp; Developed by <a href="https://aboudweb.onrender.com" target="_blank" rel="noopener noreferrer">Aboud</a>
+</p>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loading').classList.add('hidden');
+    initAnimations();
+  }, prefersReducedMotion ? 0 : 1500);
+});
+
+// قائمة الجوال (hamburger menu)
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  const isOpen = navLinks.classList.toggle('open');
+  navToggle.classList.toggle('open', isOpen);
+  navToggle.setAttribute('aria-expanded', isOpen);
+});
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  });
+});
+
+function initAnimations() {
+  if (prefersReducedMotion) {
+    // إظهار كل العناصر مباشرة بدون حركة لمن يفضل تقليل الحركة
+    gsap.set('.hero-eyebrow,.hero-title,.hero-subtitle,.hero-scroll-indicator,.quote-text,.timeline-content,.timeline-image,.comparison-title,.comparison-side-left,.comparison-side-right,.final-clock-name,.final-transition,.final-text', {
+      opacity: 1, y: 0, x: 0, scale: 1
+    });
+    document.getElementById('nav').classList.add('visible');
+    return;
+  }
+
+  const heroTl = gsap.timeline();
+  heroTl
+    .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
+    .to('.hero-title', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.6')
+    .to('.hero-subtitle', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.6')
+    .to('.hero-scroll-indicator', { opacity: 1, duration: 1, ease: 'power2.out' }, '-=0.3');
+
+  gsap.to('#hero-img', {
+    scale: 1,
+    filter: 'brightness(0.25) contrast(1.1)',
+    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 }
+  });
+
+  gsap.to('.hero-content', {
+    opacity: 0,
+    y: -100,
+    scrollTrigger: { trigger: '.hero', start: 'top top', end: '50% top', scrub: 1 }
+  });
+
+  ScrollTrigger.create({
+    trigger: '.hero',
+    start: 'bottom 80%',
+    onEnter: () => document.getElementById('nav').classList.add('visible'),
+    onLeaveBack: () => document.getElementById('nav').classList.remove('visible')
+  });
+
+  gsap.to('.quote-text', {
+    opacity: 1,
+    y: 0,
+    duration: 1.2,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: '.quote-section', start: 'top 70%', toggleActions: 'play none none reverse' }
+  });
+
+  gsap.utils.toArray('.timeline-item').forEach((item, i) => {
+    const content = item.querySelector('.timeline-content');
+    const image = item.querySelector('.timeline-image');
+    const year = item.querySelector('.timeline-year');
+
+    gsap.to(content, {
+      opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: item, start: 'top 75%', toggleActions: 'play none none reverse' }
+    });
+
+    gsap.to(image, {
+      opacity: 1, scale: 1, duration: 1.2, ease: 'power3.out',
+      scrollTrigger: { trigger: item, start: 'top 70%', toggleActions: 'play none none reverse' }
+    });
+
+    gsap.from(year, {
+      opacity: 0, x: i % 2 === 0 ? 50 : -50, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: item, start: 'top 75%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  gsap.to('#cinematic-break img', {
+    y: '-15%', scale: 1,
+    scrollTrigger: { trigger: '#cinematic-break', start: 'top bottom', end: 'bottom top', scrub: 1 }
+  });
+
+  gsap.to('.comparison-title', {
+    opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.comparison', start: 'top 70%', toggleActions: 'play none none reverse' }
+  });
+
+  gsap.to('.comparison-side-left', {
+    opacity: 1, x: 0, duration: 1.2, ease: 'power3.out',
+    scrollTrigger: { trigger: '.comparison-grid', start: 'top 65%', toggleActions: 'play none none reverse' }
+  });
+
+  gsap.to('.comparison-side-right', {
+    opacity: 1, x: 0, duration: 1.2, delay: .2, ease: 'power3.out',
+    scrollTrigger: { trigger: '.comparison-grid', start: 'top 65%', toggleActions: 'play none none reverse' }
+  });
+
+  gsap.to('.comparison-side-left .comparison-image img', {
+    y: -30,
+    scrollTrigger: { trigger: '.comparison', start: 'top bottom', end: 'bottom top', scrub: 1 }
+  });
+
+  gsap.to('.comparison-side-right .comparison-image img', {
+    y: -50,
+    scrollTrigger: { trigger: '.comparison', start: 'top bottom', end: 'bottom top', scrub: 1 }
+  });
+
+  gsap.to('#final-bg-img', {
+    scale: 1,
+    scrollTrigger: { trigger: '.final', start: 'top bottom', end: 'bottom top', scrub: 1 }
+  });
+
+  const finalTl = gsap.timeline({
+    scrollTrigger: { trigger: '.final', start: 'top 60%', toggleActions: 'play none none reverse' }
+  });
+
+  finalTl
+    .to('.final-clock-name.old', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
+    .to('.final-transition', { opacity: .5, duration: .6, ease: 'power2.out' }, '+=0.3')
+    .to('.final-clock-name.new', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '+=0.2')
+    .to('.final-text', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '+=0.3');
+}
+</script>
+</body>
+</html>
